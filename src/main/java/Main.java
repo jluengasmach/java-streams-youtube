@@ -9,6 +9,8 @@ public class Main {
 
   public static void main(String[] args) {
     List<Person> people = getPeople();
+    System.out.println("\n*** PEOPLE ***");
+    people.forEach(System.out::println);
 
     // Imperative approach ❌
 
@@ -33,56 +35,62 @@ public class Main {
     List<Person> females = people.stream()
         .filter(person -> person.getGender().equals(Gender.FEMALE))
         .collect(Collectors.toList());
+    System.out.println("\n*** FILTER ONLY FEMALE PEOPLE ***");
+    females.forEach(System.out::println);
 
-//    females.forEach(System.out::println);
-
-    // Sort
+    // Sort & reverse
     List<Person> sorted = people.stream()
         .sorted(Comparator.comparing(Person::getAge).thenComparing(Person::getGender).reversed())
         .collect(Collectors.toList());
-
-//    sorted.forEach(System.out::println);
+    System.out.println("\n*** SORTED PEOPLE BY AGE, THEN GENDER AND REVERSE IT***");
+    sorted.forEach(System.out::println);
 
     // All match
     boolean allMatch = people.stream()
-        .allMatch(person -> person.getAge() > 8);
+        .allMatch(person -> person.getAge() > 8); // ONLY 1 PERSON DON'T MATCH
+    System.out.println("\n*** CHECK IF ALL MATCH ***");
+    System.out.println(allMatch);
 
-//    System.out.println(allMatch);
     // Any match
     boolean anyMatch = people.stream()
-        .anyMatch(person -> person.getAge() > 121);
+        .anyMatch(person -> person.getAge() < 8);  // ONLY 1 PERSON MATCH
+    System.out.println("\n*** ANY MATCH ***");
+    System.out.println(anyMatch);
 
-//    System.out.println(anyMatch);
     // None match
     boolean noneMatch = people.stream()
-        .noneMatch(person -> person.getName().equals("Antonio"));
-
-//    System.out.println(noneMatch);
+        .noneMatch(person -> person.getName().equals("Antonio")); // ANTONIO APPEARS AT LEAST 1 TIME
+    System.out.println("\n*** NONE MATCH ***");
+    System.out.println(noneMatch);
 
     // Max
+    System.out.println("\n*** GET PERSON WITH MAX AGE ***");
     people.stream()
-        .max(Comparator.comparing(Person::getAge));
-//        .ifPresent(System.out::println);
+        .max(Comparator.comparing(Person::getAge))
+        .ifPresent(System.out::println);
 
     // Min
+    System.out.println("\n*** GET PERSON WITH MIN AGE ***");
     people.stream()
-        .min(Comparator.comparing(Person::getAge));
-//        .ifPresent(System.out::println);
+        .min(Comparator.comparing(Person::getAge))
+        .ifPresent(System.out::println);
 
     // Group
     Map<Gender, List<Person>> groupByGender = people.stream()
         .collect(Collectors.groupingBy(Person::getGender));
 
-//    groupByGender.forEach((gender, people1) -> {
-//      System.out.println(gender);
-//      people1.forEach(System.out::println);
-//      System.out.println();
-//    });
+    System.out.println("\n*** GROUP BY GENDER ***");
+    groupByGender.forEach((gender, people1) -> {
+      System.out.println(gender);
+      people1.forEach(System.out::println);
+      System.out.println();
+    });
 
+    System.out.println("\n*** OLDEST FEMALE ***");
     Optional<String> oldestFemaleAge = people.stream()
         .filter(person -> person.getGender().equals(Gender.FEMALE))
         .max(Comparator.comparing(Person::getAge))
-        .map(Person::getName);
+        .map(Person::getName); // RETURN THE NAME OF THE FILTERED PERSON
 
     oldestFemaleAge.ifPresent(System.out::println);
   }
